@@ -1,7 +1,7 @@
 import unittest
 import copula_ordinal_regression.tespo as tespo
 import numpy as np
-from examples import log_reg
+import log_reg
 
 X,y  = log_reg.rand_dset()
 p0   = log_reg.init(X,y)
