@@ -1,1 +1,3 @@
-from mlr import mlr
+from mlr.mlr import mlr
+from cor.cor import cor
+from cor.sor import sor
