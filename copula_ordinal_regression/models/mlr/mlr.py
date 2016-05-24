@@ -1,6 +1,6 @@
-import sys
+mport sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__)+'/../', os.path.pardir)))
 import numpy as np
 import theano as T
 import theano.tensor as TT
@@ -64,18 +64,15 @@ class mlr():
             loss += 1./self.C * TT.sum(TT.sqr(para['w'].value))
         return loss
 
-    def fit(self, X, y, lock=None):
+    def fit(self, X, y):
+        """
         """
 
-        """
-
-        if lock!=None:lock.acquire()
         self.predict_C = tespo.compile(
             self._predict, [self.p0, X], jac=False)
 
         self.loss_C, self.loss_grad_C = tespo.compile(
             self._loss, [self.p0, X, y], jac=True)
-        if lock!=None:lock.release()
 
         if self.verbose == 0:callback = None
         if self.verbose >= 1:callback = 'default'
