@@ -10,18 +10,9 @@ y = np.vstack(dat['y'])
 print X.shape
 print y.shape
 
-clf = cor.models.sor(max_iter=10)
-# clf.fit(X,y)
-# y_hat = clf.predict(X)
-
-# print np.mean((y-np.zeros_like(y_hat))**2,0).mean()
-# print np.mean((y-y_hat)**2,0).mean()
-
-clf = grid_search.GridSearchCV(
-        clf,
-        clf.hyper_parameters,
-        n_jobs=-1
-        )
+clf = cor.models.sor(max_iter=100,verbose=1)
 clf.fit(X,y)
+y_hat = clf.predict(X)
 
-print np.array([exp[1] for exp in clf.grid_scores_])
+print np.mean((y-np.zeros_like(y_hat))**2,0).mean()
+print np.mean((y-y_hat)**2,0).mean()

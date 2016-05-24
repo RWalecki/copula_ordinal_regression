@@ -1,4 +1,4 @@
-mport sys
+import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__)+'/../', os.path.pardir)))
 import numpy as np
@@ -6,31 +6,27 @@ import theano as T
 import theano.tensor as TT
 import tespo
 import cPickle,gzip
+from sklearn.base import BaseEstimator
 
-
-class mlr():
+class mlr(BaseEstimator):
 
     def __init__(
             self,
-            X,
-            y,
-            C=1e3,
+            C=1e10,
             max_iter=100,
             verbose=0,
     ):
         """
         """
-        self.C = C
+        self.__name__ = 'mlr'
         self.max_iter = max_iter
         self.verbose = verbose
-        self.p0 = self._init_para(X, y)
-        self.Output = np.unique(y)
-        self.p1 = self.p0
-        self.C_default = np.power(10.,np.arange(-5,6))
+
+        self.C = C
+        self.hyper_parameters = {
+                'C':10.**np.arange(-4,5),
+                }
     
-        # dry-run
-        tespo.debug(self._loss, [self.p0, X, y])
-        tespo.debug(self._predict, [self.p0, X])
 
     def _init_para(self, X, y):
         '''
@@ -58,20 +54,26 @@ class mlr():
     def _loss(self, para, X, y):
         w = para['w'].value
         b = para['b'].value
-        r = TT.dot(X,w.T)+b
-        loss = TT.mean(TT.sqr(y-r))
+        y_hat = TT.dot(X,w.T)+b
+        loss = TT.mean((y-y_hat)**2)
         if self.C:
-            loss += 1./self.C * TT.sum(TT.sqr(para['w'].value))
+            loss += 1./float(self.C) * TT.sum(TT.sqr(w))
         return loss
 
-    def fit(self, X, y):
+    def fit(self, X, y, debug=0):
         """
         """
+        self.p0 = self._init_para(X, y)
 
-        self.predict_C = tespo.compile(
+        if debug:
+            tespo.debug(self._loss, [self.p0, X, y])
+            tespo.debug(self._predict, [self.p0, X])
+            return self
+
+        # compile theano functions
+        self._predict_C = tespo.compile(
             self._predict, [self.p0, X], jac=False)
-
-        self.loss_C, self.loss_grad_C = tespo.compile(
+        self._loss_C, self._loss_grad_C = tespo.compile(
             self._loss, [self.p0, X, y], jac=True)
 
         if self.verbose == 0:callback = None
@@ -79,9 +81,9 @@ class mlr():
 
         # start optimization
         self.p1, self.cost = tespo.optimize(
-            fun=self.loss_C,
+            fun=self._loss_C,
             p0=self.p0,
-            jac=self.loss_grad_C,
+            jac=self._loss_grad_C,
             callback=callback,
             method='CG',
             args=(X, y),
@@ -93,5 +95,10 @@ class mlr():
         """
         """
         para = tespo.utils.para_2_vector(self.p1)
-        y_hat = self.predict_C(para, X)
+        y_hat = self._predict_C(para, X)
         return y_hat
+
+    def score(self,X,y):
+        para = tespo.utils.para_2_vector(self.p1)
+        y_hat = self._predict_C(para, X)
+        return np.mean((y-y_hat)**2,0).mean()
