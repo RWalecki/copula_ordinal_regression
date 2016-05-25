@@ -8,7 +8,7 @@ import tespo
 import cPickle,gzip
 from sklearn.base import BaseEstimator
 
-class mlr(BaseEstimator):
+class MLR(BaseEstimator):
 
     def __init__(
             self,

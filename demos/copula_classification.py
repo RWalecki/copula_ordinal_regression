@@ -10,7 +10,7 @@ y = np.vstack(dat['y'])
 print X.shape
 print y.shape
 
-clf = cor.models.sor(max_iter=100,verbose=1)
+clf = cor.models.SOR(max_iter=100,verbose=1)
 clf.fit(X,y)
 y_hat = clf.predict(X)
 

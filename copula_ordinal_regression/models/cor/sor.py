@@ -72,7 +72,7 @@ def compute_cll(pdf, y=None):
 
     return log_prob(P)
 
-class sor(BaseEstimator):
+class SOR(BaseEstimator):
 
     def __init__(
             self,

@@ -1,19 +1,19 @@
 import unittest
-import TeaSpoon
+import copula_ordinal_regression.tespo as tespo
 import numpy as np
 import log_reg
 
 X,y  = log_reg.rand_dset()
 p0   = log_reg.init(X,y)
-pred = TeaSpoon.compile(log_reg.pred, [p0, X], jac=False)
-loss, grad = TeaSpoon.compile(log_reg.loss, [p0, X, y], jac=True)
+pred = tespo.compile(log_reg.pred, [p0, X], jac=False)
+loss, grad = tespo.compile(log_reg.loss, [p0, X, y], jac=True)
 
 
 class testcase:
 
     def test_default(self):
 
-        p1, res = TeaSpoon.optimize(
+        p1, res = tespo.optimize(
             fun=loss,
             p0=p0,
             jac=grad,
@@ -25,7 +25,7 @@ class testcase:
 
 
     def test_none(self):
-        p1, res = TeaSpoon.optimize(
+        p1, res = tespo.optimize(
             fun=loss,
             p0=p0,
             jac=grad,
@@ -41,14 +41,14 @@ class testcase:
 
 
         def _callback(pi):
-            Y_hat = TeaSpoon.exe(pred, [pi, X])
+            Y_hat = tespo.exe(pred, [pi, X])
             out = {}
             out['MSE']   = np.mean(Y_hat==y)
-            out['Loss']  = TeaSpoon.exe(loss, [pi, X,y])
+            out['Loss']  = tespo.exe(loss, [pi, X,y])
             opt = {'freq':10}
             return out, opt
 
-        p1, res = TeaSpoon.optimize(
+        p1, res = tespo.optimize(
             fun=loss,
             p0=p0,
             jac=grad,

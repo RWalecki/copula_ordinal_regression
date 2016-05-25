@@ -10,7 +10,7 @@ y = np.vstack(dat['y'])
 print X.shape
 print y.shape
 
-clf = cor.models.mlr(max_iter=50)
+clf = cor.models.MLR(C=0,max_iter=50)
 
 clf = grid_search.GridSearchCV(
         clf,

@@ -1,1 +1,1 @@
-class cor():pass
+class COR():pass
