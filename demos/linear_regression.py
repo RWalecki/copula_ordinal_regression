@@ -2,21 +2,38 @@ import cPickle
 import gzip
 import numpy as np
 import copula_ordinal_regression as cor
-from sklearn import grid_search
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import cross_val_predict 
+from sklearn.model_selection import LabelKFold , KFold
+import mula_learn as mll
+
 
 dat = cPickle.load(gzip.open('./tests/data/disfa_slim.pklz','rb'))
 X = np.vstack(dat['X'])
 y = np.vstack(dat['y'])
-print X.shape
-print y.shape
+S = np.hstack([[ii]*jj.shape[0] for ii,jj in zip(dat['S'],dat['y'])])
 
-clf = cor.models.MLR(C=0,max_iter=50)
+cv = KFold(2)
 
-clf = grid_search.GridSearchCV(
+clf = cor.models.MLR(max_iter=1000)
+
+clf = GridSearchCV(
         clf,
         clf.hyper_parameters,
-        n_jobs=-1
+        cv = cv,
+        n_jobs= -1,
+        verbose = 10,
         )
 clf.fit(X,y)
 
-print np.array([exp[1] for exp in clf.grid_scores_])
+y_hat = cross_val_predict(
+        clf.best_estimator_,
+        X, y, 
+        cv = cv,
+        verbose = 10
+        )
+
+
+print np.mean((y-y_hat)**2,0).mean()
+print mll.utils.metrics.ICC(y,y_hat)
+print mll.utils.metrics.ICC(y,y_hat).mean()

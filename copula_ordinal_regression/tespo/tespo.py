@@ -52,7 +52,6 @@ def optimize(p0, fun, method='BFGS', args=None, jac=None, callback='default', op
 
     def _callback_none(xi):pass
 
-        
 
     if callback == None:
         _callback = _callback_none

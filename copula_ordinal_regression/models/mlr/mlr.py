@@ -10,6 +10,10 @@ from sklearn.base import BaseEstimator
 
 class MLR(BaseEstimator):
 
+    hyper_parameters = {
+            'C':10.**np.arange(-4,5),
+            }
+
     def __init__(
             self,
             C=1e10,
@@ -18,14 +22,9 @@ class MLR(BaseEstimator):
     ):
         """
         """
-        self.__name__ = 'mlr'
         self.max_iter = max_iter
         self.verbose = verbose
-
         self.C = C
-        self.hyper_parameters = {
-                'C':10.**np.arange(-4,5),
-                }
     
 
     def _init_para(self, X, y):
@@ -57,7 +56,7 @@ class MLR(BaseEstimator):
         y_hat = TT.dot(X,w.T)+b
         loss = TT.mean((y-y_hat)**2)
         if self.C:
-            loss += 1./float(self.C) * TT.sum(TT.sqr(w))
+            loss += 1/float(self.C) * TT.sum(TT.sqr(w))
         return loss
 
     def fit(self, X, y, debug=0):
@@ -99,6 +98,7 @@ class MLR(BaseEstimator):
         return y_hat
 
     def score(self,X,y):
+
         para = tespo.utils.para_2_vector(self.p1)
         y_hat = self._predict_C(para, X)
-        return np.mean((y-y_hat)**2,0).mean()
+        return -np.mean((y-y_hat)**2,0).mean()
