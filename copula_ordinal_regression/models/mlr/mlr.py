@@ -11,7 +11,7 @@ from sklearn.base import BaseEstimator
 class MLR(BaseEstimator):
 
     hyper_parameters = {
-            'C':10.**np.arange(-4,5),
+            'C':[0]+10.**np.arange(-3,7),
             }
 
     def __init__(

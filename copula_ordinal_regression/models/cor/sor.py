@@ -74,9 +74,16 @@ def compute_cll(pdf, y=None):
 
 class SOR(BaseEstimator):
 
+    hyper_parameters = {
+            'C':[0]+10.**np.arange(-3,7),
+            'margins':['normcdf','sigmoid'],
+            'loss_function':['mse','ncll'],
+            'output':['MAP','expectation'],
+            }
+
     def __init__(
             self,
-            C=0,
+            C = 0,
             margins = 'normcdf',
             loss_function = 'ncll',
             output = 'MAP',
@@ -91,13 +98,6 @@ class SOR(BaseEstimator):
         self.margins = margins
         self.loss_function = loss_function
         self.output = output
-
-        self.hyper_parameters = {
-                'C':10.**np.arange(-4,5),
-                'margins':['normcdf','sigmoid'],
-                'loss_function':['mse','ncll'],
-                'output':['MAP','expectation'],
-                }
 
     def _init_para(self, X, y):
         '''
@@ -227,4 +227,4 @@ class SOR(BaseEstimator):
     def score(self,X,y):
         para = tespo.utils.para_2_vector(self.p1)
         y_hat = self._predict_C(para, X)
-        return np.mean((y-y_hat)**2,0).mean()
+        return -np.mean((y-y_hat)**2,0).mean()
