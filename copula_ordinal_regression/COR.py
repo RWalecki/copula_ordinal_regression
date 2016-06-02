@@ -5,6 +5,7 @@ import theano as T
 import theano.tensor as TT
 import itertools
 from pystruct.inference import inference_ad3
+from sklearn.covariance import GraphLasso
 
 from .tespo import tespo
 from .statistics import node_potn, edge_potn
@@ -56,11 +57,28 @@ class COR(BASE):
         p0, shape = BASE._init_para(self, X, y)
 
         edges = []
-        for i in itertools.combinations(range(y.shape[1]), 2):
-            e1 = min(i)
-            e2 = max(i)
-            edges.append([e1, e2])
+        if self.sparsity==0:
+            for i in itertools.combinations(range(y.shape[1]), 2):
+                e1 = min(i)
+                e2 = max(i)
+                edges.append([e1, e2])
+        else:
+            lasso = GraphLasso(alpha = 0.1)
+            lasso.fit(y)
+            graph = lasso.get_precision()!=0
+            for i in range(graph.shape[0]):
+                for j in range(i+1,graph.shape[1]):
+                    if graph[i,j]==0:continue
+                    edges.append([i, j])
+
         self.edges = T.shared(np.array(edges).T).astype('int8')
+
+        if self.verbose:
+            print '(edges)',edges
+            print '(y) shape:',y.shape,'labels:',np.unique(y)
+            print '(X) shape:',X.shape,'std:',np.std(X)
+
+
 
         theta = []
         for e1, e2 in edges:

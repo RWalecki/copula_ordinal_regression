@@ -16,14 +16,14 @@ clf = cor.COR(
         margins = 'sigmoid',    # marginal function. [ sigmoid, normcdf ]
         copula = 'frank',       # copula function.   [ frank, gumbel, indep ]
         optimizer = 'CG',       # scipy optimizer    [ CG, BFGS, TNC ... ]
-        sparsity = 0,           # level of sparsity: fully connected crf if this parameter is set to 0
+        sparsity = 2,           # level of sparsity: fully connected crf if this parameter is set to 0
         w_nodes = 0.1,          # balance potentials. Set this between 0 (only unary)  and 1 (only binary)
         shared_copula = True,   # share the same copula parameter for full range of intensities
         verbose=1,              # verbose level
         )
 
 # fit the model and apply predction 
-clf.fit(X_tr,y_tr)
+clf.fit(X_tr,y_tr,debug=True)
 y_hat = clf.predict(X_te)
 
 # print resutls on test set
