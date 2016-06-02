@@ -8,6 +8,7 @@ requires:
 * Numpy
 * Scipy
 * Theano (>= 0.7)
+* PyStruct (>= 0.2.4)
 * scikit-learn
 
 First, get the code from Github:
