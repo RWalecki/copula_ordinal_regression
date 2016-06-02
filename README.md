@@ -38,4 +38,4 @@ ___
 Copula Ordinal Regression is free of charge for research purposes only.
 If you use is, please cite:
 * "Copula Ordinal Regression for Joint Estimation of Facial Action Unit Intensity", R. Walecki, O. Rudovic, V. Pavlovic, M. Pantic. Proceedings of IEEE International Conference on Computer Vision and Pattern Recognition (CVPR 2016). Las Vegas, Nevada, June 2016.
-___
+[[pdf](http://ibug.doc.ic.ac.uk/media/uploads/documents/copula_ordinal_regression__cvpr2016_final.pdf "pdf")]
