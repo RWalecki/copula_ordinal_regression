@@ -3,7 +3,7 @@ import copula_ordinal_regression.metrics as metrics
 import numpy as np
 import copy
 
-methods = [[name,val] for name, val in metrics.__dict__.iteritems() if callable(val)]
+methods = [[name,val] for name, val in metrics.__dict__.items() if callable(val)]
 
 
 class testcase:

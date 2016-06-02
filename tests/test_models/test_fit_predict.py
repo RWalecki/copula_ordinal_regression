@@ -1,4 +1,4 @@
-import cPickle
+import pickle as cPickle
 import gzip
 import numpy as np
 import copula_ordinal_regression as cor
