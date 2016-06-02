@@ -1,11 +1,15 @@
 import theano as T
+import sys
 import theano.tensor as TT
 import numpy as np
 import scipy
 from copy import deepcopy
 import collections
 from .utils import make_theano_tensors, para_2_vector, vector_2_para
+
 glob_counter = 0
+T.config.allow_gc = False
+sys.setrecursionlimit(10000)
 
 
 class parameter():

@@ -1,5 +1,5 @@
 # Copula Ordinal Regression
-Copula Ordinal Regression is a statistical lerning method in which the goal is to predict a set of discrete variables that are ordinal. For example, predicting the intensity of different facial action units on a scale from 0 to 5 starts can be considered an mutli-output ordinal regression task.
+Copula Ordinal Regression is a statistical lerning method in which the goal is to predict a set of discrete ordinal variables. For example, predicting the intensity of different facial action units on a scale from 0 to 5 can be considered an mutli-output ordinal regression task.
 This is a generalization of the multi-label classification task, where the set of classification problem is restricted to binary classification, and of the multi-class classification task.
 
 ##### Install instructions:
