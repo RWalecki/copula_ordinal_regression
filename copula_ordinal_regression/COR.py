@@ -1,17 +1,17 @@
 import sys
 import os
-import tespo
 import numpy as np
 import theano as T
 import theano.tensor as TT
-
-from statistics import node_potn, edge_potn
-from copulas import frank, indep, gumbel
-from pystruct.inference import inference_ad3
-from marginals import sigmoid, normcdf
 import itertools
+from pystruct.inference import inference_ad3
 
-from BASE import BASE
+from .tespo import tespo
+from .statistics import node_potn, edge_potn
+from .copulas import frank, indep, gumbel
+from .marginals import sigmoid, normcdf
+
+from .BASE import BASE
 
 class COR(BASE):
 

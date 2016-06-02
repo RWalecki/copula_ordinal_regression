@@ -2,7 +2,6 @@ import numpy as np
 from copy import deepcopy
 import theano.tensor as TT
 
-
 def make_theano_tensors(list_of_datasets):
     theano_tensor = [TT.dscalar(), TT.dvector(), TT.dmatrix(), TT.dtensor3()]
     res = []
@@ -11,7 +10,6 @@ def make_theano_tensors(list_of_datasets):
         theano_t = deepcopy(theano_tensor[dim])
         res.append(theano_t)
     return res
-
 
 def para_2_vector(para):
     u = []
@@ -24,7 +22,6 @@ def para_2_vector(para):
         u.append(para[p].value.flatten(0))
     res = np.concatenate(u)
     return res
-
 
 def vector_2_para(vec, para):
     res = deepcopy(para)

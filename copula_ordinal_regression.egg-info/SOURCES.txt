@@ -1,0 +1,17 @@
+setup.py
+copula_ordinal_regression/BASE.py
+copula_ordinal_regression/COR.py
+copula_ordinal_regression/__init__.py
+copula_ordinal_regression/copulas.py
+copula_ordinal_regression/data_sets.py
+copula_ordinal_regression/marginals.py
+copula_ordinal_regression/metrics.py
+copula_ordinal_regression/statistics.py
+copula_ordinal_regression.egg-info/PKG-INFO
+copula_ordinal_regression.egg-info/SOURCES.txt
+copula_ordinal_regression.egg-info/dependency_links.txt
+copula_ordinal_regression.egg-info/pbr.json
+copula_ordinal_regression.egg-info/top_level.txt
+copula_ordinal_regression/tespo/__init__.py
+copula_ordinal_regression/tespo/tespo.py
+copula_ordinal_regression/tespo/utils.py
