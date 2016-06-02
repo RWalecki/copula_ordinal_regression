@@ -1,1 +1,1 @@
-from tespo import *
+from .tespo import tespo

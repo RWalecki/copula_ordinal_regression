@@ -1,16 +1,10 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__)+'/../', os.path.pardir)))
-
-import tespo
 import numpy as np
 import theano as T
 import theano.tensor as TT
-
 from sklearn.base import BaseEstimator
-
-
-
+from .tespo import tespo
 
 class BASE(BaseEstimator):
 

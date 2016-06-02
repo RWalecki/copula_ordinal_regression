@@ -16,7 +16,6 @@ def _post_process(res):
         return res[0]
     return res
 
-
 def ACC(y_hat, y_lab):
     y_hat, y_lab = _pre_process(y_hat, y_lab)
     return np.mean((y_hat==y_lab), 1)
