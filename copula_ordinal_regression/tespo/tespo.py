@@ -50,7 +50,7 @@ def optimize(p0, fun, method='BFGS', args=None, jac=None, callback='default', op
         if glob_counter % 10 == 0:
             count = str(glob_counter)
             while len(count)<4:count=' '+count
-            print 'iter:', count, "%0.5e" % fun(xi, *args)
+            print('iter:', count, "%0.5e" % fun(xi, *args))
             pi = vector_2_para(xi, p0)
         glob_counter += 1
 
@@ -71,8 +71,8 @@ def optimize(p0, fun, method='BFGS', args=None, jac=None, callback='default', op
         for item in table:
             while len(item)<11:item=item+' '
             res+=item[:10]+' '
-        print 'Epoch:     ' + res
-        print '-'*(len(table)*11+11)
+        print('Epoch:     ' + res)
+        print('-'*(len(table)*11+11))
 
         def _callback(xi):
             global glob_counter
@@ -82,13 +82,13 @@ def optimize(p0, fun, method='BFGS', args=None, jac=None, callback='default', op
                 pi       = vector_2_para(xi,p0)
                 table, _ = callback(pi)
                 table    = collections.OrderedDict(sorted(table.items()))
-                line     = np.array([glob_counter]+table.values())
+                line     = np.array([glob_counter]+list(table.values()))
 
                 for i in line:
                     s = str('%.4g' % i)
-                    while len(s)<9:s=s+' '
-                    print s+' ',
-                print
+                    while len(s)<9:
+                        s=s+' '
+                        print(s+' ')
 
     res = scipy.optimize.minimize(
         x0 = para_2_vector(p0),

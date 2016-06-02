@@ -14,7 +14,7 @@ def make_theano_tensors(list_of_datasets):
 def para_2_vector(para):
     u = []
 
-    keys=para.keys()
+    keys=list(para.keys())
     keys.sort()
     for p in keys:
         if para[p].const:
@@ -27,7 +27,7 @@ def vector_2_para(vec, para):
     res = deepcopy(para)
     u0 = 0
 
-    keys=para.keys()
+    keys=list(para.keys())
     keys.sort()
     for p in keys:
         if para[p].const:
