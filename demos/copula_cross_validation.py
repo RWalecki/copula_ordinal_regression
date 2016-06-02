@@ -12,7 +12,7 @@ y = y[:,[0,1,2]]
 
 
 # select estimator and number of folds for cross validation
-clf = cor.COR(max_iter=100, verbose=0)
+clf = cor.COR(max_iter=5000, verbose=0)
 cv = LabelKFold(9)
 
 # define parameter grid
