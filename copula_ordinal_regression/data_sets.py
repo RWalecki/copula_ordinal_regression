@@ -11,5 +11,17 @@ def load_disfa():
     S = np.hstack([[ii]*jj.shape[0] for ii,jj in zip(dat['S'],dat['y'])])
     return X,y,S
 
-def load_fera():pass
-def load_pain():pass
+def load_fera2015():
+    dat = cPickle.load(gzip.open(pwd+'/data/fera2015.pklz','rb'))
+    X = np.vstack(dat['X'])
+    y = np.vstack(dat['y'])
+    S = np.hstack([[ii]*jj.shape[0] for ii,jj in zip(dat['S'],dat['y'])])
+    return X,y,S
+
+def load_shoulder_pain():
+    dat = cPickle.load(gzip.open(pwd+'/data/shoulder_pain.pklz','rb'))
+    X = np.vstack(dat['X'])
+    y = np.vstack(dat['y'])
+    S = np.hstack([[ii]*jj.shape[0] for ii,jj in zip(dat['S'],dat['y'])])
+    return X,y,S
+
