@@ -1,5 +1,5 @@
 import unittest
-import copula_ordinal_regression.utils.metrics as metrics
+import copula_ordinal_regression.metrics as metrics
 import numpy as np
 import copy
 
