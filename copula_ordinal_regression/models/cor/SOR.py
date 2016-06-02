@@ -6,76 +6,23 @@ import tespo
 import numpy as np
 import theano as T
 import theano.tensor as TT
-from sklearn.base import BaseEstimator, ClassifierMixin
+
+from statistics import *
+from marginals import sigmoid, normcdf
+from sklearn.base import BaseEstimator
 
 
-def sigmoid(nu, sigma, z):
-    return TT.nnet.sigmoid((z-nu)/sigma)
 
-def normcdf(nu, sigma, z):
-    return 0.5 * ( 1 + TT.erf( (z-nu) / (sigma * (2**0.5) ) ) )
-
-def weights(y,type):
-    if type==None:
-        return np.ones_like(y)/np.float64(y.shape[0])
-    if type=='balanced':
-        lb = preprocessing.LabelBinarizer()
-        lb.fit(y.flatten())
-        res = np.zeros_like(y)
-        for i in range(y.shape[1]):
-            w_ = np.sum(lb.transform(y[:,i]),0)
-            res[:,i] = w_[y[:,i]]
-        return (np.float64(res)**-1.)
-
-def expectation(P):
-    states = TT.arange(P.shape[2]).dimshuffle('x','x',0)
-    states = TT.extra_ops.repeat(states,P.shape[0],0)
-    states = TT.extra_ops.repeat(states,P.shape[1],1)
-    return TT.sum(P*states,axis=2)
-
-def log_prob(P, realmin = 1e-20):
-    '''
-    numerical stabil log function
-    for some reason theano needs a high realmin value
-    '''
-
-    # if prob is less than realmin, set it to realmin
-    idx = TT.le(P,realmin).nonzero()
-    P = TT.set_subtensor(P[idx],realmin)
-
-    # if prob larger than 1-realmin, set it to 1-realmin
-    idx = TT.ge(P,1-realmin).nonzero()
-    P = TT.set_subtensor(P[idx],1-realmin)
-
-    idx = TT.isnan(P).nonzero()
-    P = TT.set_subtensor(P[idx],realmin)
-
-    idx = TT.isinf(P).nonzero()
-    P = TT.set_subtensor(P[idx],realmin)
-
-    return TT.log(P)
-
-def compute_cll(pdf, y=None):
-    '''
-    pdf:     [AU X Frame X Label]
-
-    node that there are M+1 Thresholds and they have to go from 0 to 1
-    '''
-    if y:
-        y_ = y.T.astype('int8').flatten(1)
-        pdf = pdf.T.flatten(2)
-        idx = TT.arange(y_.shape[0])
-        P = pdf[y_,idx]
-        P = P.reshape(y.shape)
-    else:
-        P = pdf
-
-    return log_prob(P)
 
 class SOR(BaseEstimator):
 
+    hyper_parameters_quick = {
+            'C':[0]+10.**np.arange(0,5),
+            'margins':['normcdf','sigmoid'],
+            }
+
     hyper_parameters = {
-            'C':[0]+10.**np.arange(-3,7),
+            'C':[0]+10.**np.arange(0,10),
             'margins':['normcdf','sigmoid'],
             'loss_function':['mse','ncll'],
             'output':['MAP','expectation'],
@@ -83,12 +30,12 @@ class SOR(BaseEstimator):
 
     def __init__(
             self,
-            C = 0,
-            margins = 'normcdf',
+            C = 1e5,
+            margins = 'sigmoid',
             loss_function = 'ncll',
             output = 'MAP',
             verbose = 0,
-            max_iter = 500,
+            max_iter = 15000,
             ):
         """
         """
@@ -113,13 +60,16 @@ class SOR(BaseEstimator):
         b = np.ones(M) *(1 - 0.5 * C)
         s = np.ones(M)
 
-        para = {}
-        para['b'] = tespo.parameter(b)
-        para['w'] = tespo.parameter(w)
-        para['d'] = tespo.parameter(d)
-        para['s'] = tespo.parameter(s)
+        p0 = {}
+        p0['b'] = tespo.parameter(b)
+        p0['w'] = tespo.parameter(w)
+        p0['d'] = tespo.parameter(d)
+        p0['s'] = tespo.parameter(s)
 
-        return para, [F,C,M]
+        if self.margins=='sigmoid':self._margin = sigmoid
+        if self.margins=='normcdf':self._margin = normcdf
+
+        return p0, [F,C,M]
     
     def _z(self, para, X):
         w = para['w'].value
@@ -177,8 +127,8 @@ class SOR(BaseEstimator):
             loss = TT.mean( TT.sqr(E-y) )
 
         if self.loss_function=='ncll':
-            CLL = compute_cll(P, y)
-            loss = -TT.mean( CLL )
+            NCLL = node_potn(P, y)
+            loss = TT.mean( NCLL )
 
         if self.C:
             loss += 1./float(self.C) * TT.sum(TT.sqr(para['w'].value))
@@ -188,9 +138,6 @@ class SOR(BaseEstimator):
     def fit(self, X, y, debug=0):
         self.p0, self.shape = self._init_para(X, y)
         self.p1 = self.p0
-
-        if self.margins=='sigmoid':self._margin = sigmoid
-        if self.margins=='normcdf':self._margin = normcdf
 
         # dry-run
         if debug==True:
@@ -225,6 +172,5 @@ class SOR(BaseEstimator):
         return y_hat
 
     def score(self,X,y):
-        para = tespo.utils.para_2_vector(self.p1)
-        y_hat = self._predict_C(para, X)
+        y_hat = self.predict(X)
         return -np.mean((y-y_hat)**2,0).mean()
