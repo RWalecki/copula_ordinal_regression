@@ -1,4 +1,7 @@
-import pickle as cPickle
+try:
+    import cPickle
+except ImportError:
+    import pickle as cPickle
 import gzip
 import os
 import numpy as np
