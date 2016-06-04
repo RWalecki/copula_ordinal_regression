@@ -22,7 +22,7 @@ parameter = {
         'w_nodes':np.linspace(0,1,5),
         }
 
-# # apply grid search to find optimal hyper parameters
+# apply grid search to find optimal hyper parameters
 clf = GridSearchCV(
         clf,
         parameter,
@@ -32,6 +32,7 @@ clf = GridSearchCV(
         refit=False
         )
 clf.fit(X,y,S)
+print clf.best_params_
 
 # apply cross validation using best hyper parameters
 y_hat = cross_val_predict(
