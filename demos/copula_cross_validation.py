@@ -22,7 +22,7 @@ parameter = {
         'w_nodes':np.linspace(0,1,5),
         }
 
-# apply grid search to find optimal hyper parameters
+# # apply grid search to find optimal hyper parameters
 clf = GridSearchCV(
         clf,
         parameter,
@@ -32,22 +32,22 @@ clf = GridSearchCV(
         refit=False
         )
 clf.fit(X,y,S)
-print clf.best_params_
 
 # apply cross validation using best hyper parameters
 y_hat = cross_val_predict(
         clf.best_estimator_,
-        clf,
         X, y, S,
-        n_jobs=1,
+        n_jobs=-1,
         cv = cv,
         verbose = 10
         )
 
 
 # print resutls on test set
-print cor.metrics.ICC(y_te,y_hat)
-print 'avr. CORR:',cor.metrics.ICC(y_te,y_hat).mean()
+print cor.metrics.CORR(y,y_hat)
+print 'avr. CORR:',cor.metrics.CORR(y,y_hat).mean()
+# results should be: 0.52 0.46 0.63 
 print 
-print cor.metrics.CORR(y_te,y_hat)
-print 'avr. ICC:',cor.metrics.ICC(y_te,y_hat).mean()
+print cor.metrics.CORR(y,y_hat)
+print 'avr. ICC:',cor.metrics.ICC(y,y_hat).mean()
+# results should be: 0.55 0.48 0.64 
