@@ -74,9 +74,9 @@ class COR(BASE):
         self.edges = T.shared(np.array(edges).T).astype('int8')
 
         if self.verbose:
-            print '(edges)',edges
-            print '(y) shape:',y.shape,'labels:',np.unique(y)
-            print '(X) shape:',X.shape,'std:',np.std(X)
+            print('(edges)',edges)
+            print('(y) shape:',y.shape,'labels:',np.unique(y))
+            print('(X) shape:',X.shape,'std:',np.std(X))
 
 
 
