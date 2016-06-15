@@ -9,7 +9,7 @@ requires:
 * Scipy
 * Theano (>= 0.7)
 * PyStruct (>= 0.2.4)
-* scikit-learn
+* scikit-learn (>= 0.18)
 
 First, get the code from Github:
 ```sh
