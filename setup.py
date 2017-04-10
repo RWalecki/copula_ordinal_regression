@@ -21,7 +21,7 @@ setup(
     url = "",
     data_files = [
         ('./copula_ordinal_regression/data/', [
-        './copula_ordinal_regression/data/disfa.pklz',
+        './copula_ordinal_regression/data/disfa.npz',
         ])],
     classifiers=[
         "Development Status :: 3 - Alpha",
