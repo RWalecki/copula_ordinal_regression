@@ -32,8 +32,7 @@ The tests should not take longer than a few seconds. You are ready to use copula
 
 ##### Quick-Start:
 You should read through the scripts that are located in the __demo__ folder to understand how the models are applied. The files are heavily commented and are basically a small tutorial.
-'__copula_classification.py__' contains an example of how to train the model and use it to predict structured outputs (Action Units).
-The file '__copula_cross_validation.py__' contains an example of an exhaustive parameter grid search using cross validation.
+'__copula_classification.py__' contains an example of how to train the model and use it to predict structured outputs (multiple Facial Action Units in that case).
 ___
 ##### License and Citations
 Copula Ordinal Regression is free of charge for research purposes only.
